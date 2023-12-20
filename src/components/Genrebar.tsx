@@ -11,7 +11,7 @@ interface GenreBarProps {
 
 const GenreBar: React.FC<GenreBarProps> = ({ genres, onGenreFilter }) => {
   return (
-    <div className="glass-genre-bar flex justify-center space-x-4">
+    <div className="glass-genre-bar flex justify-center space-x-4 mb-7">
       <button
         className="glass-genre-button text-white text-lg"
         onClick={() => onGenreFilter(null)}
@@ -21,7 +21,7 @@ const GenreBar: React.FC<GenreBarProps> = ({ genres, onGenreFilter }) => {
       {genres.map((genre) => (
         <button
           key={genre.id}
-          className="glass-genre-button text-white text-lg "
+          className="glass-genre-button text-white text-xl hover:text-sky-400"
           onClick={() => {
             onGenreFilter(String(genre.id));
           }}
