@@ -3,11 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMovieContext } from "../contexts/movieContext";
-import { useAuth } from "@/app/hooks/useAuth";
 import { getGenres } from "../services/genre.service";
 import { uploadRequest } from "../services/upload.service";
 import { createMovie } from "../services/movie.service";
-import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface MovieModalProps {
   isOpen: boolean;
@@ -33,8 +31,6 @@ const MovieModal: React.FC<MovieModalProps> = ({ isOpen, onClose }) => {
   const { updateMovies } = useMovieContext();
   const [genres, setGenres] = useState<Genre[]>([]);
   const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const auth = useAuth();
-
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -67,17 +63,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ isOpen, onClose }) => {
         poster: posterUrl,
       };
 
-      const accessTokenResult = await auth.getToken();
-      const accessToken = accessTokenResult?.accessToken;
-      console.log("Access Token:", accessToken)
-        if (!accessToken) {
-          console.error("Access token is undefined.");
-          
-          return;
-        }
-
-const response = await createMovie(movieData, accessToken);
-console.log("Create Movie Response:", response);
+      const response = await createMovie(movieData);
 
       if (!response) {
         console.error("Failed to submit movie.");
@@ -87,7 +73,6 @@ console.log("Create Movie Response:", response);
       const updatedMovies = await fetch(`${NEXT_PUBLIC_API_URL}movies`).then((res) =>
         res.json()
       );
-      console.log("Updated Movies:", updatedMovies);
 
       updateMovies(updatedMovies);
       setLoading(false);

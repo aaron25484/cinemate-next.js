@@ -5,6 +5,9 @@ import { useMovieContext } from "../contexts/movieContext";
 import GenreBar, { Genre } from "./Genrebar";
 import MovieCard, { Movie } from "./MovieCard";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import router from "next/router";
 
 const MovieList: React.FC = () => {
   const {
@@ -17,6 +20,8 @@ const MovieList: React.FC = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const { user } = useUser();
   const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const notify = (message: string) => toast.error(message);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,22 +100,61 @@ const MovieList: React.FC = () => {
     }
   };
 
+  const handleMovieCardClick = (movieId: string) => {
+    if (!user) {
+      notify("You must log in to see the movie details");
+    } 
+  };
   return (
+    <>
+    <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        toastStyle={{
+          background: "#3d405b",
+          color: "#edf2f4",
+        }}
+      />
     <div className="container mx-auto mt-4">
-      <GenreBar genres={genres} onGenreFilter={handleGenreFilter} />
+        <GenreBar genres={genres} onGenreFilter={handleGenreFilter} />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
         {filteredMovies.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            onToggleWatchlist={handleToggleWatchlist}
-            isInWatchlist={!!movie.isInWatchlist}
-          />
-        ))}
+            <div key={movie.id} onClick={() => handleMovieCardClick(movie.id)}>
+              {/* Check if the user is authenticated before rendering the link */}
+              {user ? (
+                <Link href={`movies/${movie.id}`} key={movie.id}>
+                  
+                    <MovieCard
+                      key={movie.id}
+                      movie={movie}
+                      onToggleWatchlist={handleToggleWatchlist}
+                      isInWatchlist={!!movie.isInWatchlist}
+                    />
+                  
+                </Link>
+              ) : (
+                // Display a div without a link if the user is not authenticated
+                <MovieCard
+                  key={movie.id}
+                  movie={movie}
+                  onToggleWatchlist={handleToggleWatchlist}
+                  isInWatchlist={!!movie.isInWatchlist}
+                />
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default MovieList;
+export default MovieList

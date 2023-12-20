@@ -1,9 +1,6 @@
 const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-import { getAccessToken } from '@auth0/nextjs-auth0';
-
-
-interface MovieData {
+export interface MovieData {
   name: string;
   score: number;
   genre: string;
@@ -12,14 +9,12 @@ interface MovieData {
 
 export const createMovie = async (
   movieData: MovieData,
-  accessToken: string | undefined
 ): Promise<{ message?: string; error?: string }> => {
   try {
     const response = await fetch(`${NEXT_PUBLIC_API_URL}movies`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
       },
       body: JSON.stringify(movieData)
     });
@@ -39,7 +34,8 @@ export const createMovie = async (
 
 export const getMovies = async (movieId: string) => {
   try {
-    const response = await fetch(`${NEXT_PUBLIC_API_URL}movies/${movieId}`);
+    const response = await fetch(`${NEXT_PUBLIC_API_URL}movies/${movieId}`,
+    {method: "GET"});
 
     if (response.ok) {
       const movies = await response.json();
@@ -54,4 +50,24 @@ export const getMovies = async (movieId: string) => {
     return null;
   }
 };
+
+export const getMovieById = async (movieId: string) => {
+  try {
+    const apiUrl = `${NEXT_PUBLIC_API_URL}movies/${encodeURIComponent(movieId)}`;
+    const response = await fetch(apiUrl, { method: 'GET' });
+
+    if (response.ok) {
+      const movies = await response.json();
+      return movies;
+    } else {
+      const errorData = await response.json();
+      console.error(`Failed to fetch movie details for ID ${movieId}:`, errorData);
+      throw new Error(`Failed to fetch movie details for ID ${movieId}`);
+    }
+  } catch (error) {
+    console.error('Error fetching movies:', error);
+    return null;
+  }
+
+}
 
