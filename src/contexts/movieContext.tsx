@@ -37,14 +37,14 @@ const MovieContext = createContext<MovieContextValue | undefined>(undefined);
 export const MovieProvider: React.FC<MovieContextProps> = ({ children }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [watchlist, setWatchlist] = useState<Movie[]>([]);
-  const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const { user } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const moviesResponse = await fetch(`${NEXT_PUBLIC_API_URL}movies`);
+        const moviesResponse = await fetch(`${url}movies`);
         
         if (moviesResponse.ok) {
           const updatedMovies = await moviesResponse.json();
@@ -54,7 +54,7 @@ export const MovieProvider: React.FC<MovieContextProps> = ({ children }) => {
         }
   
         if (user) {
-          const watchlistResponse = await fetch(`${NEXT_PUBLIC_API_URL}users/${user.email}/watchlist`);
+          const watchlistResponse = await fetch(`${url}users/${user.email}/watchlist`);
   
           if (watchlistResponse.ok) {
             const watchlistData = await watchlistResponse.json();
@@ -79,7 +79,7 @@ export const MovieProvider: React.FC<MovieContextProps> = ({ children }) => {
     try {
       if (user) {
         const response = await fetch(
-          `${NEXT_PUBLIC_API_URL}users/${user?.email}/watchlist`,
+          `${url}users/${user?.email}/watchlist`,
           {
             method: "PATCH",
             headers: {
@@ -111,7 +111,7 @@ const removeFromWatchlist = async (movieId: string) => {
   try {
     if (user) {
       const response = await fetch(
-        `${NEXT_PUBLIC_API_URL}users/${user?.email}/watchlist`,
+        `${url}users/${user?.email}/watchlist`,
         {
           method: "DELETE",
           headers: {
@@ -142,7 +142,7 @@ const removeFromWatchlist = async (movieId: string) => {
 
   const getUserWatchlist = async (email: string): Promise<Movie[] | null> => {
     try {
-      const response = await fetch(`${NEXT_PUBLIC_API_URL}users/${email}/watchlist`);
+      const response = await fetch(`${url}users/${email}/watchlist`);
       
       if (response.ok) {
         const watchlist = await response.json();

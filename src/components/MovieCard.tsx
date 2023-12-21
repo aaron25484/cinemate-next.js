@@ -28,7 +28,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const { user } = useUser();
   const [genreName, setGenreName] = useState<string>("Unknown Genre");
-  const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
   }, [isInWatchlist])
@@ -36,7 +36,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
   useEffect(() => {
     const fetchGenreName = async () => {
       try {
-        const response = await fetch(`${NEXT_PUBLIC_API_URL}genres/${genreId}`);
+        const response = await fetch(`${url}genres/${genreId}`);
 
         if (response.ok) {
           const genre = await response.json();

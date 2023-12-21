@@ -46,7 +46,7 @@ const MovieDetails = ({ movieId }: any) => {
   }, [NEXT_PUBLIC_OMDB_URL,movieId]);
 
   return (
-    <div className="flex flex-col items-center sm:flex-row justify-center">
+    <div className="flex flex-col items-center sm:flex-row justify-center mt-8">
       <div className="w-full sm:w-1/2 pr-4 order-1 sm:order-none">
         <img
           src={movieDetails?.poster}
