@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import MovieModal from "./MovieModal";
+import MovieModal from "./AddMovieModal";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
