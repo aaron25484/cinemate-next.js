@@ -1,10 +1,12 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useUser, withPageAuthRequired, WithPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import MovieCard from "./MovieCard";
 import { Movie } from "./MovieCard";
 import { getUserByEmail, updateUser } from "../services/user.service";
 import { getMovies } from "../services/movie.service";
-import { useMovieContext } from "../context/movieContext";
+import { useMovieContext } from "../contexts/movieContext";
 
 interface UserData {
   name: string;
@@ -13,7 +15,7 @@ interface UserData {
 }
 
 const Profile: React.FC = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user } = useUser();
   const {addToWatchlist, removeFromWatchlist, getUserWatchlist} = useMovieContext()
   const [userData, setUserData] = useState<UserData>({
     name: "",
@@ -25,7 +27,7 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        if (isAuthenticated && user) {
+        if (user) {
           const userEmail = user.email || '';
           const userDataResponse = await getUserByEmail(userEmail);
 
@@ -60,11 +62,11 @@ const Profile: React.FC = () => {
     };
 
     fetchUserData();
-  }, [isAuthenticated, user]);
+  }, [user]);
   
   const onToggleWatchlist = async (movieId: string) => {
     try {
-      if (isAuthenticated && user) {
+      if (user) {
         const action = isInWatchlist(movieId) ? "delete" : "add";
   
         const watchlistService =
@@ -94,7 +96,7 @@ const Profile: React.FC = () => {
 
   const handleUpdateUser = async () => {
     try {
-      if (isAuthenticated && user && userData) {
+      if (user && userData) {
         const updateUserResponse = await updateUser(user.email, userData);
 
         if (updateUserResponse) {
@@ -109,14 +111,15 @@ const Profile: React.FC = () => {
     }
   };
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <div>Please log in to view your profile.</div>;
   }
 
   return (
     <div className="container mx-auto mt-4">
-      <h1 className="text-3xl font-semibold mb-4">User Profile</h1>
+      <h1 className="text-3xl font-semibold text-white mb-4">User Profile</h1>
       <div className="mb-4">
+        <img src={user.picture || undefined} alt={user.name || undefined} width={200} height={200} className="rounded-full" />
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Name:
         </label>
@@ -168,4 +171,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default withPageAuthRequired (Profile);
