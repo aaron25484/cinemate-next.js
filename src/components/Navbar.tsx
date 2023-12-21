@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createUser } from "../services/user.service";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "../assets/img/logo.png"
 
 const Navbar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,6 +16,8 @@ const Navbar: React.FC = () => {
   const { user, isLoading } =
     useUser();
     const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+    const notify = (message: string) => toast.warning(message);
 
   const openModal = () => {
     if (!user) {
@@ -27,7 +31,6 @@ const Navbar: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const notify = (message: string) => toast.error(message);
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -97,15 +100,17 @@ const Navbar: React.FC = () => {
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center">
             {!user && (
-              <img
-                src="src/assets/img/logo.png"
-                alt="Clapperboard"
+              <Image
+                src={logo}
+                alt="Film roll"
+                width={150}
+                height={150}
                 className=" w-40 h-40"
               />
             )}
             {user && userName && (
               <div className="flex items-center">
-                <Link href="/user/profile" className="text-white mr-4">
+                <Link href="/profile" className="text-white mr-4">
                   Welcome, {userName}
                 </Link>
                 <img
@@ -116,7 +121,7 @@ const Navbar: React.FC = () => {
               </div>
             )}
           </div>
-          <Link href="/" className=" text-sky-300 text-4xl font-semibold">
+          <Link href="/" className=" text-sky-300 text-5xl font-semibold">
             CineMate
           </Link>
 

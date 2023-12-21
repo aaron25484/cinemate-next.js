@@ -67,7 +67,6 @@ const MovieCard: React.FC<MovieCardProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <p>{genreName}</p>
       <img
         src={poster}
         alt="movie poster"

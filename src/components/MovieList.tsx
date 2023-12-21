@@ -128,7 +128,6 @@ const MovieList: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
         {filteredMovies.map((movie) => (
             <div key={movie.id} onClick={() => handleMovieCardClick(movie.id)}>
-              {/* Check if the user is authenticated before rendering the link */}
               {user ? (
                 <Link href={`movies/${movie.id}`} key={movie.id}>
                   
@@ -141,7 +140,6 @@ const MovieList: React.FC = () => {
                   
                 </Link>
               ) : (
-                // Display a div without a link if the user is not authenticated
                 <MovieCard
                   key={movie.id}
                   movie={movie}

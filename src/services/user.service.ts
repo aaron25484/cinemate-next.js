@@ -17,7 +17,7 @@ export const createUser = async (userObject: {}) => {
   }
 };
 
-export const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string | null | undefined) => {
   try {
     const response = await fetch(`${NEXT_PUBLIC_API_URL}users/${email}`);
 
@@ -31,7 +31,7 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-export const updateUser = async (email: string, userData: {}) => {
+export const updateUser = async (email: string | null | undefined, userData: {}) => {
   try {
     const response = await fetch(`${NEXT_PUBLIC_API_URL}users/${email}`, {
       method: "PATCH",
