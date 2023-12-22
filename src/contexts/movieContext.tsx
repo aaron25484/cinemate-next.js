@@ -72,8 +72,9 @@ export const MovieProvider: React.FC<MovieContextProps> = ({ children }) => {
   }, [user]);
 
   const updateMovies = (newMovies: Movie[]) => {
-    setMovies((prevMovies) => [...prevMovies, ...newMovies]);
+    setMovies(newMovies);
   };
+  
 
   const addToWatchlist = async (movieId: string) => {
     try {
