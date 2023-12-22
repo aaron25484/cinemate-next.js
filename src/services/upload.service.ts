@@ -5,12 +5,9 @@ export const uploadRequest = async (file: File | undefined): Promise<string | un
     file && formData.append('file', file);
     formData.append('upload_preset', 'posterPreset');
 
-    const NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-    console.log("NEXT_CLOUDINARY_API_URL:", NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME);
+    const url = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
-
-
-    const response: Response = await fetch(`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`, {
+    const response: Response = await fetch(`${url}`, {
       method: 'POST',
       body: formData,
     });

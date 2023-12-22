@@ -30,7 +30,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { updateMovies } = useMovieContext();
   const [genres, setGenres] = useState<Genre[]>([]);
-  const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -70,7 +70,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ isOpen, onClose }) => {
         throw new Error("Failed to submit movie");
       }
 
-      const updatedMovies = await fetch(`${NEXT_PUBLIC_API_URL}movies`).then((res) =>
+      const updatedMovies = await fetch(`${url}movies`).then((res) =>
         res.json()
       );
 
