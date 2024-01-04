@@ -117,9 +117,16 @@ const Profile: React.FC = () => {
 
   return (
     <div className="container mx-auto mt-4">
-      <h1 className="text-3xl font-semibold text-white mb-4">User Profile</h1>
       <div className="mb-4">
-        <img src={user.picture || undefined} alt={user.name || undefined} width={200} height={200} className="rounded-full" />
+        <div className="flex justify-end">
+        <img src={user.picture || undefined} alt={user.name || undefined} width={150} height={150} className="rounded-full" />
+        <div className="text-white align-baseline">
+          <h4>{user.email}</h4>
+          <h4>{user.name}</h4>
+        </div>
+        </div>
+        
+        
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Name:
         </label>

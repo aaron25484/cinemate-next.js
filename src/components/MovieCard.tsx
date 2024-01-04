@@ -59,7 +59,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
       onToggleWatchlist(id);
     }
   };
-
+        
 
   return (
     <div
@@ -76,7 +76,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
         <h2 className="text-2xl font-semibold mb-2 text-blue-400">{name}</h2>
         <p className="text-gray-400">Rating: {score}</p>
 
-        {isHovered && user && (
+        { user && (
           <button
             onClick={handleToggleWatchlist}
             className={`${

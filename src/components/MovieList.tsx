@@ -19,7 +19,6 @@ const MovieList: React.FC = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const { user } = useUser();
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const notify = (message: string) => toast.error(message);
 
   useEffect(() => {
@@ -73,7 +72,7 @@ const MovieList: React.FC = () => {
     };
   
     fetchData();
-  }, [user, watchlist]);
+  }, [user, watchlist, allMovies ]);
   
 
   const handleGenreFilter = (genreId: string | null) => {
