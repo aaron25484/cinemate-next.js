@@ -7,7 +7,6 @@ import MovieCard, { Movie } from "./MovieCard";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
-import router from "next/router";
 
 const MovieList: React.FC = () => {
   const {
@@ -19,17 +18,16 @@ const MovieList: React.FC = () => {
   const [filteredMovies, setFilteredMovies] = useState(allMovies);
   const [genres, setGenres] = useState<Genre[]>([]);
   const { user } = useUser();
-  const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const notify = (message: string) => toast.error(message);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [moviesResponse, genresResponse, watchlistResponse] = await Promise.all([
-          fetch(`${NEXT_PUBLIC_API_URL}movies`),
-          fetch(`${NEXT_PUBLIC_API_URL}genres`),
-          user && fetch(`${NEXT_PUBLIC_API_URL}users/${user?.email}/watchlist`)
+          fetch(`${url}movies`),
+          fetch(`${url}genres`),
+          user && fetch(`${url}users/${user?.email}/watchlist`)
         ]);
   
         if (!moviesResponse.ok) {
@@ -74,7 +72,7 @@ const MovieList: React.FC = () => {
     };
   
     fetchData();
-  }, [user, watchlist]);
+  }, [user, watchlist, allMovies ]);
   
 
   const handleGenreFilter = (genreId: string | null) => {
