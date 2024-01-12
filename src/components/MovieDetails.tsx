@@ -6,7 +6,10 @@ import { useRouter } from "next/navigation";
 
 const MovieDetails = ({ movieId }: any) => {
   const [movieDetails, setMovieDetails] = useState<MovieData | null>(null);
-  const NEXT_PUBLIC_OMDB_URL = process.env.NEXT_PUBLIC_OMDB_URL
+  const [genreName, setGenreName] = useState<string>("Unknown Genre");
+  const dburl = process.env.NEXT_PUBLIC_API_URL;
+
+  const url = process.env.NEXT_PUBLIC_OMDB_URL
   const [loading, setLoading] = useState<boolean>(true);
   const [plot, setPlot] = useState<string | null>(null);
   const [director, setDirector] = useState<string | null>(null);
@@ -24,7 +27,14 @@ const MovieDetails = ({ movieId }: any) => {
         console.log(details)
         setMovieDetails(details);
 
-        const response = await fetch(`${NEXT_PUBLIC_OMDB_URL}&t=${encodeURIComponent(details.name || '')}&plot=full`);
+        const genreResponse = await fetch(`${dburl}genres/${details.genreId}`)
+        if (genreResponse.ok) {
+          const genreData = await genreResponse.json();
+          setGenreName(genreData.name);
+        
+        }
+
+        const response = await fetch(`${url}&t=${encodeURIComponent(details.name || '')}&plot=full`);
         console.log(response)
         if (response.ok) {
           const data = await response.json();
@@ -43,7 +53,7 @@ const MovieDetails = ({ movieId }: any) => {
     };
   
     fetchDetails();
-  }, [NEXT_PUBLIC_OMDB_URL,movieId]);
+  }, [url,movieId]);
 
   return (
     <div className="flex flex-col items-center sm:flex-row justify-center mt-8 mx-auto sm:w-8/12">
@@ -56,7 +66,7 @@ const MovieDetails = ({ movieId }: any) => {
       </div>
       <div className="w-full sm:w-1/2 pl-4 order-2 sm:order-none">
         <h2 className="text-2xl font-semibold mb-2 text-blue-400">{movieDetails?.name || ''}</h2>
-        <p className="text-white">{`Genre: ${movieDetails?.genre || ''}`}</p>
+        <p className="text-white">{`Genre: ${genreName || ''}`}</p>
         <p className="text-white">{`Director: ${director || ''}`}</p>
         <p className="text-white">{`Year: ${year || ''}`}</p>
         <p className="text-white">{`Runtime: ${runtime || ''}`}</p>

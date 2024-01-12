@@ -120,7 +120,7 @@ const MovieList: React.FC = () => {
           color: "#edf2f4",
         }}
       />
-    <div className="container mx-auto mt-4">
+    <div className="container mx-auto mt-4" data-testid="container" >
         <GenreBar genres={genres} onGenreFilter={handleGenreFilter} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">

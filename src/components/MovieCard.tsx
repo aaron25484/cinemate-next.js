@@ -40,6 +40,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
 
         if (response.ok) {
           const genre = await response.json();
+          console.log(genre)
           setGenreName(genre.name);
         } else {
           console.error(
@@ -62,7 +63,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
         
 
   return (
-    <div
+    <article role="article"
       className="glass-container p-3 rounded-md shadow-md mb-3 transition-transform transform hover:scale-105"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -88,7 +89,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
           </button>
         )}
       </div>
-    </div>
+    </article>
   );
 };
 

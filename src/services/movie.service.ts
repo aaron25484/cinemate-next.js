@@ -1,4 +1,4 @@
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+const url = process.env.NEXT_PUBLIC_API_URL;
 
 export interface MovieData {
   name: string;
@@ -11,7 +11,7 @@ export const createMovie = async (
   movieData: MovieData,
 ): Promise<{ message?: string; error?: string }> => {
   try {
-    const response = await fetch(`${NEXT_PUBLIC_API_URL}movies`, {
+    const response = await fetch(`${url}movies`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ export const createMovie = async (
 
 export const getMovies = async (movieId: string) => {
   try {
-    const response = await fetch(`${NEXT_PUBLIC_API_URL}movies/${movieId}`,
+    const response = await fetch(`${url}movies/${movieId}`,
     {method: "GET"});
 
     if (response.ok) {
@@ -53,7 +53,7 @@ export const getMovies = async (movieId: string) => {
 
 export const getMovieById = async (movieId: string) => {
   try {
-    const apiUrl = `${NEXT_PUBLIC_API_URL}movies/${encodeURIComponent(movieId)}`;
+    const apiUrl = `${url}movies/${encodeURIComponent(movieId)}`;
     const response = await fetch(apiUrl, { method: 'GET' });
 
     if (response.ok) {
