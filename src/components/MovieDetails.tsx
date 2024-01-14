@@ -8,7 +8,6 @@ const MovieDetails = ({ movieId }: any) => {
   const [movieDetails, setMovieDetails] = useState<MovieData | null>(null);
   const [genreName, setGenreName] = useState<string>("Unknown Genre");
   const dburl = process.env.NEXT_PUBLIC_API_URL;
-
   const url = process.env.NEXT_PUBLIC_OMDB_URL
   const [loading, setLoading] = useState<boolean>(true);
   const [plot, setPlot] = useState<string | null>(null);
@@ -24,7 +23,6 @@ const MovieDetails = ({ movieId }: any) => {
       }
       try {
         const details = await getMovieById(movieId.movieId);
-        console.log(details)
         setMovieDetails(details);
 
         const genreResponse = await fetch(`${dburl}genres/${details.genreId}`)
@@ -35,7 +33,6 @@ const MovieDetails = ({ movieId }: any) => {
         }
 
         const response = await fetch(`${url}&t=${encodeURIComponent(details.name || '')}&plot=full`);
-        console.log(response)
         if (response.ok) {
           const data = await response.json();
           setPlot(data.Plot || "Plot not available");

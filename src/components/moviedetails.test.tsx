@@ -1,43 +1,60 @@
+// movieDetails.test.tsx
 import '@testing-library/jest-dom'
-import { render, screen, waitFor } from '@testing-library/react';
-import MovieDetails from './MovieDetails';
-import { useMovieContext } from '../contexts/movieContext';
-import { useUser } from '@auth0/nextjs-auth0/client';
 
-jest.mock('../contexts/movieContext', () => ({
-  ...jest.requireActual('../contexts/movieContext'),
-  useMovieContext: jest.fn(),
+import { render, screen, act } from "@testing-library/react";
+import MovieDetails from "./MovieDetails";
+import { getMovieById } from "@/services/movie.service";
+
+// Mock useRouter:
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      prefetch: () => null
+    };
+  }
 }));
 
-jest.mock('@auth0/nextjs-auth0/client');
+// Mock fetch:
+(global.fetch as jest.Mock) = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve({
+      Plot: "This is a test movie synopsis.",
+      Director: "Test Director",
+      Year: "2022",
+      Runtime: "2h 30min",
+    })
+  }) as Response
+);
 
-describe('MovieDetails component test', ()=>{
-  it('render all four info fields correctly', async ()=>{
+const mockMovieData = {
+  movieId: 1,
+  name: "Test Movie",
+  genreId: 1,
+  poster: "test-poster-url",
+  score: 8.5,
+};
 
-    (useUser as jest.Mock).mockReturnValue({
-      user: {
-        email: 'test@example.com',
-        name: 'Test User',
-      },
-      error: null,
-      isLoading: false,
+jest.mock("@/services/movie.service", () => ({
+  getMovieById: jest.fn(() => Promise.resolve(mockMovieData)),
+}));
+
+describe("MovieDetails Component", () => {
+  it("renders movie details correctly", async () => {
+    await act(async () => {
+      render(<MovieDetails movieId={{ movieId: 1 }} />);
     });
 
-    // Mock the movies and genres data
-    (useMovieContext as jest.Mock).mockReturnValue({
-      movies: [{ id: '1', name: 'Movie 1', score: 8, poster: 'poster1.jpg', genreId: '1' }], 
-      genres: [{ id: '1', name: 'Action' }],
-      watchlist: [],
-      addToWatchlist: jest.fn(),
-      removeFromWatchlist: jest.fn(),
-    });
+    await screen.findByText("Test Movie");
+    await screen.findByText("Director: Test Director");
+    await screen.findByText("Year: 2022");
+    await screen.findByText("Runtime: 2h 30min");
+    await screen.findByText("Rating: 8.5");
+
+    // Add additional assertions based on your component's structure
+   
+    expect(screen.getByText('Plot: This is a test movie synopsis.')).toBeInTheDocument();
+  });
 screen.debug()
-
-    render(<MovieDetails />)
-    await waitFor(() => {
-    const rating = screen.getByText('Rating: ')
-    expect(rating).toBeInTheDocument()
-  })
-})
-
-})
+  // Add more test cases as needed for different scenarios
+});

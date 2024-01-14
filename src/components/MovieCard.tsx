@@ -40,7 +40,6 @@ const MovieCard: React.FC<MovieCardProps> = ({
 
         if (response.ok) {
           const genre = await response.json();
-          console.log(genre)
           setGenreName(genre.name);
         } else {
           console.error(
