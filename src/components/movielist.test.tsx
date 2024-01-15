@@ -4,7 +4,6 @@ import MovieList from './MovieList';
 import { useMovieContext } from '../contexts/movieContext';
 import { useUser } from '@auth0/nextjs-auth0/client';
 
-// Mock the fetch function
 global.fetch = jest.fn();
 
 jest.mock('../contexts/movieContext', () => ({
@@ -16,7 +15,6 @@ jest.mock('@auth0/nextjs-auth0/client');
 
 describe('MovieList component', () => {
   it('renders MovieList component correctly', async () => {
-    // Mock the fetch response for genres
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve([{ id: '1', name: 'Action' }]),
@@ -57,7 +55,6 @@ describe('MovieList component', () => {
     });
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('movies'));
 
-    // Check if fetch was called with the correct URL for genres
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('genres'));
 
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('watchlist'));
