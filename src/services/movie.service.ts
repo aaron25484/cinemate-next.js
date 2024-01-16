@@ -71,3 +71,32 @@ export const getMovieById = async (movieId: string) => {
 
 }
 
+export const deleteMovie = async (movieId: string) => {
+  try {
+    if (!movieId) {
+      throw new Error("Movie ID is required");
+    }
+
+    const response = await fetch(`${url}movies/${movieId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error(`Failed to delete movie: ${JSON.stringify(errorData)}`);
+      throw new Error(`Failed to delete movie: ${JSON.stringify(errorData)}`);
+    }
+
+    const deletedMovie = await response.json();
+
+    console.log(deletedMovie)
+
+    return deletedMovie;
+  } catch (error) {
+    console.error("Error deleting movie:", error);
+    return null;
+  }
+};

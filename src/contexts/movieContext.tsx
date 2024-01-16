@@ -140,7 +140,6 @@ const removeFromWatchlist = async (movieId: string) => {
   }
 };
 
-
   const getUserWatchlist = async (email: string): Promise<Movie[] | null> => {
     try {
       const response = await fetch(`${url}users/${email}/watchlist`);

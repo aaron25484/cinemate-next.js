@@ -7,6 +7,7 @@ import MovieCard, { Movie } from "./MovieCard";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
+import { deleteMovie } from "@/services/movie.service";
 
 const MovieList: React.FC = () => {
   const {
@@ -20,6 +21,8 @@ const MovieList: React.FC = () => {
   const { user } = useUser();
   const url = process.env.NEXT_PUBLIC_API_URL;
   const notify = (message: string) => toast.error(message);
+  const { updateMovies } = useMovieContext();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +44,6 @@ const MovieList: React.FC = () => {
           try {
             if (watchlistResponse && watchlistResponse.ok) {
               const watchlistData = await watchlistResponse.json();
-              console.log(watchlistData);
   
               const updatedFilteredMovies = updatedMovies.map((movie: Movie) => ({
                 ...movie,
@@ -99,10 +101,38 @@ const MovieList: React.FC = () => {
     }
   };
 
-  const handleMovieCardClick = (movieId: string) => {
-    if (!user) {
+  const handleMovieCardClick = (movieId: string, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const isButton = (event.target as HTMLElement).closest('button');
+
+    if (!user && !isButton) {
       notify("You must log in to see the movie details");
-    } 
+    } else if (!isButton) {
+      window.location.href = `/movies/${movieId}`;
+    } else {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  const handleDeleteMovie = async (movieId: string) => {
+    console.log("Deleting movie with ID:", movieId);
+
+    try {
+      const deletedMovie = await deleteMovie(movieId);
+
+      if (deletedMovie) {
+        console.log("Movie deleted successfully:", deletedMovie);
+        const updatedMovies = await fetch(`${url}movies`).then((res) =>
+        res.json()
+      );
+
+      updateMovies(updatedMovies);
+      } else {
+        console.error("Failed to delete movie");
+      }
+    } catch (error) {
+      console.error("Error deleting movie:", error);
+    }
   };
   return (
     <>
@@ -126,24 +156,25 @@ const MovieList: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
         {filteredMovies.map((movie) => (
-            <div key={movie.id} onClick={() => handleMovieCardClick(movie.id)}>
-              {user ? (
-                <Link href={`movies/${movie.id}`} key={movie.id}>
-                  
-                    <MovieCard
-                      key={movie.id}
-                      movie={movie}
-                      onToggleWatchlist={handleToggleWatchlist}
-                      isInWatchlist={!!movie.isInWatchlist}
-                    />
-                  
-                </Link>
+            <div key={movie.id} onClick={(e) => handleMovieCardClick(movie.id, e)}>
+            {user ? (
+              <div>
+                <MovieCard
+                  key={movie.id}
+                  movie={movie}
+                  onToggleWatchlist={handleToggleWatchlist}
+                  isInWatchlist={!!movie.isInWatchlist}
+                  onDelete={handleDeleteMovie}
+                />
+              </div>
               ) : (
                 <MovieCard
                   key={movie.id}
                   movie={movie}
                   onToggleWatchlist={handleToggleWatchlist}
                   isInWatchlist={!!movie.isInWatchlist}
+                  onDelete={handleDeleteMovie}
+
                 />
               )}
             </div>
