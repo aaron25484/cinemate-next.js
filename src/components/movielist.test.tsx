@@ -25,10 +25,11 @@ describe('MovieList component', () => {
       json: () => Promise.resolve([{ id: '1', name: 'Movie 1', score: 8, poster: 'poster1.jpg', genreId: '1' }]),
     });
 
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
+    const mockWatchlistResponse = {
       ok: true,
-      json: () => Promise.resolve([]), 
-    });
+      json: () => Promise.resolve(['2']),
+    };
+    (global.fetch as jest.Mock).mockResolvedValueOnce(mockWatchlistResponse);
 
     (useUser as jest.Mock).mockReturnValue({
       user: {
@@ -42,7 +43,7 @@ describe('MovieList component', () => {
     (useMovieContext as jest.Mock).mockReturnValue({
       movies: [{ id: '1', name: 'Movie 1', score: 8, poster: 'poster1.jpg', genreId: '1' }],
       genres: [],
-      watchlist: [],
+      watchlist: [{ id: '2'}],
       addToWatchlist: jest.fn(),
       removeFromWatchlist: jest.fn(),
     });
@@ -57,7 +58,7 @@ describe('MovieList component', () => {
 
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('genres'));
 
-    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('watchlist'));
+    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('users/test@example.com/watchlist'));
 
   });
 });

@@ -2,6 +2,11 @@ import '@testing-library/jest-dom'
 import { render, screen, act } from "@testing-library/react";
 import MovieDetails from "./MovieDetails";
 
+type MockedResponse<T> = Promise<{
+  ok: boolean;
+  json: () => Promise<T>;
+}>;
+
 jest.mock("next/navigation", () => ({
   useRouter() {
     return {
@@ -13,13 +18,13 @@ jest.mock("next/navigation", () => ({
 (global.fetch as jest.Mock) = jest.fn(() =>
   Promise.resolve({
     ok: true,
-    json: () => Promise.resolve({
+    json: jest.fn().mockResolvedValue({
       Plot: "This is a test movie synopsis.",
       Director: "Test Director",
       Year: "2022",
       Runtime: "2h 30min",
     })
-  }) as Response
+  }) as MockedResponse<{ Plot: string; Director: string; Year: string; Runtime: string }>
 );
 
 const mockMovieData = {
@@ -48,5 +53,4 @@ describe("MovieDetails Component", () => {
    
     expect(screen.getByText('Plot: This is a test movie synopsis.')).toBeInTheDocument();
   });
-screen.debug()
 });

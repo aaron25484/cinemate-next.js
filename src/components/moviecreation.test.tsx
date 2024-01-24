@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useMovieContext } from '../contexts/movieContext';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import MovieModal from './AddMovieModal';
@@ -13,56 +13,58 @@ jest.mock('../contexts/movieContext', () => ({
 
 jest.mock('@auth0/nextjs-auth0/client');
 
-describe('Movie creation and displaying', ()=>{
+describe('Movie creation and displaying', () => {
   it('should create a movie and display it', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve([{ id: '1', name: 'Action' }]),
     });
-    useMovieContext.mockImplementation(() => ({
+    (useMovieContext as jest.Mock).mockImplementation(() => ({
       movies: [],
       watchlist: [],
       addToWatchlist: jest.fn(),
       removeFromWatchlist: jest.fn(),
     }));
-    useUser.mockImplementation(() => ({
+    (useUser as jest.Mock).mockImplementation(() => ({
       user: {
         email: 'test@example.com',
       },
     }));
 
-    render(<MovieModal isOpen={true} onClose={() => {}}/>);
+    render(<MovieModal isOpen={true} onClose={() => {}} closeModal={()=>{}} />);
 
-    await waitFor(() => {
-      expect(screen.getByText('Add Movie')).toBeInTheDocument();
+    await act(async () => {
+      await waitFor(() => {
+        expect(screen.getByText('Add Movie')).toBeInTheDocument();
+      });
+
+      const movieTitleInput = screen.getByRole('textbox');
+      const movieScoreInput = screen.getAllByRole('combobox')[0] as HTMLSelectElement;
+      const movieGenreInput = screen.getAllByRole('combobox')[1] as HTMLSelectElement;
+      const moviePosterInput = screen.getAllByRole('button')[1] as HTMLInputElement;
+
+      expect(movieTitleInput).toBeInTheDocument();
+      expect(movieScoreInput).toBeInTheDocument();
+      expect(movieGenreInput).toBeInTheDocument();
+      expect(moviePosterInput).toBeInTheDocument();
+
+      fireEvent.change(movieTitleInput, { target: { value: 'Test Movie' } });
+      fireEvent.change(movieScoreInput[0], { target: { value: '5' } });
+      fireEvent.change(movieGenreInput[0], { target: { value: '1' } });
+
+      const file = new File(['(mock data)'], 'movie_poster.jpg', { type: 'image/jpg' });
+      const fileList = {
+        0: file,
+        length: 1,
+        item: jest.fn((index) => file),
+      };
+
+      Object.defineProperty(moviePosterInput, 'files', {
+        value: fileList,
+      });
+
+      const saveButton = screen.getByText('Save');
+      fireEvent.click(saveButton);
     });
-
-    const movieTitleInput = screen.getByRole('textbox');
-    const movieScoreInput = screen.getAllByRole('combobox');
-    const movieGenreInput = screen.getAllByRole('combobox');
-    const moviePosterInput = screen.getByRole('deletion');
-
-    expect(movieTitleInput).toBeInTheDocument();
-    expect(movieScoreInput).toBeInTheDocument();
-    expect(movieGenreInput).toBeInTheDocument();
-    expect(moviePosterInput).toBeInTheDocument();
-
-    fireEvent.change(movieTitleInput, { target: { value: 'Test Movie' } });
-    fireEvent.change(movieScoreInput, { target: { value: '5' } });
-    fireEvent.change(movieGenreInput, { target: { value: '1' } });
-
-    const file = new File(['(mock data)'], 'movie_poster.jpg', { type: 'image/jpg' });
-    const fileList = {
-      0: file,
-      length: 1,
-      item: jest.fn((index) => file),
-    };
-    
-    Object.defineProperty(moviePosterInput, 'files', {
-      value: fileList,
-    });
-
-    const saveButton = screen.getByText('Save');
-    fireEvent.click(saveButton)
-  })
-})
+  });
+});
