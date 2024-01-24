@@ -15,21 +15,19 @@ jest.mock('@auth0/nextjs-auth0/client');
 
 describe('MovieList component', () => {
   it('renders MovieList component correctly', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve([{ id: '1', name: 'Action' }]),
-    });
-
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve([{ id: '1', name: 'Movie 1', score: 8, poster: 'poster1.jpg', genreId: '1' }]),
-    });
-
-    const mockWatchlistResponse = {
-      ok: true,
-      json: () => Promise.resolve(['2']),
-    };
-    (global.fetch as jest.Mock).mockResolvedValueOnce(mockWatchlistResponse);
+    (global.fetch as jest.Mock)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve([{ id: '1', name: 'Action' }]),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve([{ id: '1', name: 'Movie 1', score: 8, poster: 'poster1.jpg', genreId: '1' }]),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(['2']),
+      });
 
     (useUser as jest.Mock).mockReturnValue({
       user: {
@@ -55,10 +53,7 @@ describe('MovieList component', () => {
       expect(movieCards.length).toBeGreaterThanOrEqual(1);
     });
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('movies'));
-
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('genres'));
-
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('users/test@example.com/watchlist'));
-
   });
 });
