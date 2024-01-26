@@ -13,11 +13,9 @@ import logo from "../assets/img/logo.png"
 const Navbar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userName, setUserName] = useState<string>();
-  const { user, isLoading } =
-    useUser();
-    const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-    const notify = (message: string) => toast.warning(message);
+  const { user, isLoading } = useUser();
+  const url = process.env.NEXT_PUBLIC_API_URL;
+  const notify = (message: string) => toast.warning(message);
 
   const openModal = () => {
     if (!user) {
@@ -37,7 +35,7 @@ const Navbar: React.FC = () => {
       try {
         if (user) {
           const response = await fetch(
-            `${NEXT_PUBLIC_API_URL}users/${user?.email}`
+            `${url}users/${user?.email}`
           );
           if (response.ok) {
             const userData = await response.json();
