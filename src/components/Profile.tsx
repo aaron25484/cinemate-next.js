@@ -168,8 +168,11 @@ const Profile: React.FC = () => {
                 movie={movie}
                 onToggleWatchlist={onToggleWatchlist}
                 isInWatchlist={isInWatchlist(movie.id)}
-                isRemovable={true}
-              />
+                isRemovable={true} onEdit={function (): void {
+                  throw new Error("Function not implemented.");
+                } } onDelete={function (movieId: string): void {
+                  throw new Error("Function not implemented.");
+                } }              />
             ))}
           </div>
         </div>
