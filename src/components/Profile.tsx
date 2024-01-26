@@ -7,6 +7,7 @@ import { Movie } from "./MovieCard";
 import { getUserByEmail, updateUser } from "../services/user.service";
 import { getMovies } from "../services/movie.service";
 import { useMovieContext } from "../contexts/movieContext";
+import { useUserContext } from "@/contexts/userContext";
 
 interface UserData {
   name: string;
@@ -23,6 +24,8 @@ const Profile: React.FC = () => {
     password: "",
   });
   const [userWatchlist, setUserWatchlist] = useState<Movie[]>([]);
+    const { updateUserName } = useUserContext();
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -97,9 +100,12 @@ const Profile: React.FC = () => {
   const handleUpdateUser = async () => {
     try {
       if (user && userData) {
+
         const updateUserResponse = await updateUser(user.email, userData);
 
         if (updateUserResponse) {
+
+          updateUserName(userData.name)
         } else {
           console.error(
             `Failed to update user: ${updateUserResponse}`
@@ -118,13 +124,13 @@ const Profile: React.FC = () => {
   return (
     <div className="container mx-auto mt-4">
       <div className="mb-4">
-        <div className="flex justify-end">
-        <img src={user.picture || undefined} alt={user.name || undefined} width={150} height={150} className="rounded-full" />
-        <div className="text-white align-baseline">
-          <h4>{user.email}</h4>
-          <h4>{user.name}</h4>
-        </div>
-        </div>
+        <div className="flex items-center ">
+          <img src={user.picture || undefined} alt={user.name || undefined} width={150} height={150} className="rounded-full" />
+            <div className="text-white ml-10 justify-around">
+              <h4>{user.email}</h4>
+              <h4>{userData.name}</h4>
+            </div>
+      </div>
         
         
         <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -132,24 +138,10 @@ const Profile: React.FC = () => {
         </label>
         <input
           type="text"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow appearance-none border rounded w-96 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Name"
           value={userData.name}
           onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          Password:
-        </label>
-        <input
-          type="password"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Password"
-          value={userData.password}
-          onChange={(e) =>
-            setUserData({ ...userData, password: e.target.value })
-          }
         />
       </div>
       <button
@@ -160,7 +152,7 @@ const Profile: React.FC = () => {
       </button>
       {userWatchlist.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold mt-8 mb-4">Watchlist</h2>
+          <h2 className=" text-2xl font-semibold mt-8 mb-4  text-teal-500">Watchlist</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
             {userWatchlist.map((movie) => (
               <MovieCard

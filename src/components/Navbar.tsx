@@ -9,6 +9,7 @@ import { createUser } from "../services/user.service";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../assets/img/logo.png"
+import { useUserContext } from "@/contexts/userContext";
 
 const Navbar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,6 +17,7 @@ const Navbar: React.FC = () => {
   const { user, isLoading } = useUser();
   const url = process.env.NEXT_PUBLIC_API_URL;
   const notify = (message: string) => toast.warning(message);
+  const { updateUserName } = useUserContext();
 
   const openModal = () => {
     if (!user) {
@@ -29,8 +31,8 @@ const Navbar: React.FC = () => {
     setIsModalOpen(false);
   };
 
-
   useEffect(() => {
+
     const fetchUserName = async () => {
       try {
         if (user) {
@@ -51,7 +53,7 @@ const Navbar: React.FC = () => {
     };
 
     fetchUserName();
-  }, [user]);
+  }, [user, updateUserName]);
 
   useEffect(() => {
     const registerUserInMongoDB = async () => {

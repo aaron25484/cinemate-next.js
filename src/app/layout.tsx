@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar'
 import { UserProvider } from '@auth0/nextjs-auth0/client'
 import { MovieProvider } from '@/contexts/movieContext'
 import { Oswald } from 'next/font/google'
+import { UserContextProvider } from '@/contexts/userContext'
 
 const oswald = Oswald({ 
   subsets: ['latin'],
@@ -26,12 +27,14 @@ export default function RootLayout({
     className={`${oswald.variable}`}
     >
       <UserProvider>
-        <MovieProvider>
-          <body>
-            <Navbar />
-            {children}
-          </body>
-        </MovieProvider>
+        <UserContextProvider>
+          <MovieProvider>
+            <body>
+              <Navbar />
+              {children}
+            </body>
+          </MovieProvider>
+        </UserContextProvider>
       </UserProvider>
     </html>
   )

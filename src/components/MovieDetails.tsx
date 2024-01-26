@@ -73,7 +73,7 @@ const MovieDetails = ({ movieId }: any) => {
         ) : (
           <div className="mt-4 text-white max-w-screen-md">{`Plot: ${plot}`}</div>
         )}
-        <button className="text-white mt-4" onClick={() => router.back()}>Go Back</button>
+        <button className="text-blue-400 mt-4 text-xl" onClick={() => router.back()}>Go Back</button>
       </div>
     </div>
 
