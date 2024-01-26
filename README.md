@@ -13,13 +13,13 @@ To run the project locally, follow these steps:
 1. Install dependencies:
 
     ```bash
-    npm install
+    pnpm install
     ```
 
 2. Run the development server:
 
     ```bash
-    npm run dev
+    pnpm run dev
     ```
 
 3. Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -28,24 +28,27 @@ To run the project locally, follow these steps:
 
 To build the project for deployment, use the following command:
 
-```bash
-npm run build
+ ```bash
+    pnpm run build
+  ```
 This will generate a production-ready build in the .next directory.
 
 Running Tests
 Jest is used for unit testing. Run the tests with the following command:
 
-bash
-Copy code
-npm test
-Continuous Integration/Continuous Deployment (CI/CD)
+```bash
+pnpm run test
+``````
+
+
+#### Continuous Integration/Continuous Deployment (CI/CD)
 This project is set up with Jenkins for CI/CD. Jenkins is configured to automate the build and deployment processes. It ensures that changes are tested and deployed consistently.
 
-Technologies Used
-Next.js: A React framework for building web applications.
-TypeScript: A superset of JavaScript that adds static types.
-Prisma: A database toolkit for TypeScript and Node.js.
-MongoDB: A NoSQL database for storing application data.
-Auth0: A platform for authentication and authorization.
-Jest: A testing framework for JavaScript and TypeScript.
-Jenkins: An automation server for building, testing, and deploying.
+#### Technologies Used
+* Next.js: A React framework for building web applications.
+* TypeScript: A superset of JavaScript that adds static types.
+* Prisma: A database toolkit for TypeScript and Node.js.
+* MongoDB: A NoSQL database for storing application data.
+* Auth0: A platform for authentication and authorization.
+* Jest: A testing framework for JavaScript and TypeScript.
+* Jenkins: An automation server for building, testing, and deploying.
