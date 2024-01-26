@@ -5,9 +5,9 @@ import { useMovieContext } from "../contexts/movieContext";
 import GenreBar, { Genre } from "./Genrebar";
 import MovieCard, { Movie } from "./MovieCard";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import { deleteMovie } from "@/services/movie.service";
+import EditMovieModal from "./EditMovieModal";
 
 const MovieList: React.FC = () => {
   const {
@@ -22,7 +22,8 @@ const MovieList: React.FC = () => {
   const url = process.env.NEXT_PUBLIC_API_URL;
   const notify = (message: string) => toast.error(message);
   const { updateMovies } = useMovieContext();
-
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,13 +116,11 @@ const MovieList: React.FC = () => {
   };
 
   const handleDeleteMovie = async (movieId: string) => {
-    console.log("Deleting movie with ID:", movieId);
 
     try {
       const deletedMovie = await deleteMovie(movieId);
 
       if (deletedMovie) {
-        console.log("Movie deleted successfully:", deletedMovie);
         const updatedMovies = await fetch(`${url}movies`).then((res) =>
         res.json()
       );
@@ -133,6 +132,25 @@ const MovieList: React.FC = () => {
     } catch (error) {
       console.error("Error deleting movie:", error);
     }
+  };
+
+  const handleEditMovie = async (movieId: string) => {
+    try {
+      setSelectedMovieId(movieId);
+      setEditModalOpen(true);
+  
+      const updatedMovies = await fetch(`${url}movies`).then((res) => res.json());
+
+      updateMovies(updatedMovies);
+      
+    } catch (error) {
+      console.error("Error editing movie:", error);
+    }
+  };
+
+  const closeModal = () => {
+    setEditModalOpen(false);
+    setSelectedMovieId(null);
   };
   return (
     <>
@@ -165,7 +183,7 @@ const MovieList: React.FC = () => {
                   onToggleWatchlist={handleToggleWatchlist}
                   isInWatchlist={!!movie.isInWatchlist}
                   onDelete={handleDeleteMovie}
-                />
+                  onEdit={() => handleEditMovie(movie.id)}                />
               </div>
               ) : (
                 <MovieCard
@@ -174,13 +192,25 @@ const MovieList: React.FC = () => {
                   onToggleWatchlist={handleToggleWatchlist}
                   isInWatchlist={!!movie.isInWatchlist}
                   onDelete={handleDeleteMovie}
-
+                  onEdit={() => handleEditMovie(movie.id)}
                 />
               )}
             </div>
           ))}
         </div>
       </div>
+      {selectedMovieId && (
+        <EditMovieModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setEditModalOpen(false);
+            setSelectedMovieId(null);
+            closeModal()
+          }}
+          movieId={selectedMovieId}
+          closeModal={closeModal}
+        />
+      )}
     </>
   );
 };

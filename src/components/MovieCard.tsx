@@ -16,14 +16,14 @@ interface MovieCardProps {
   onToggleWatchlist: (movieId: string) => void;
   isInWatchlist: boolean;
   isRemovable?: boolean;
-  // onEdit: (movieId: string) => void;
+  onEdit: () => void;
   onDelete: (movieId: string) => void;
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({
   movie,
   onToggleWatchlist,
-  
+  onEdit,
   onDelete,
   isInWatchlist,
   isRemovable = false
@@ -64,15 +64,9 @@ const MovieCard: React.FC<MovieCardProps> = ({
     }
   };
 
- /*  const handleEdit = () => {
-    onEdit(id);
-  }; */
-
   const handleDelete = () => {
     onDelete(id);
   };
-
-        
 
   return (
       <article
@@ -106,7 +100,8 @@ const MovieCard: React.FC<MovieCardProps> = ({
                   : "Add to Watchlist"}
               </button>
               <button
-                    // onClick={handleEdit}
+                    onClick={onEdit}
+
                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mt-2 mx-2 transition duration-300"
                   >
                     Edit
