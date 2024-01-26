@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
-import MovieList from './MovieList';
+import MovieList from '../components/MovieList';
 import { useMovieContext } from '../contexts/movieContext';
 import { useUser } from '@auth0/nextjs-auth0/client';
 
@@ -45,6 +45,8 @@ describe('MovieList component', () => {
       addToWatchlist: jest.fn(),
       removeFromWatchlist: jest.fn(),
     });
+
+    jest.spyOn(console, 'error').mockImplementation(() => {})
 
     render(<MovieList />);
 

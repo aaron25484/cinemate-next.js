@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 import { render, screen, act } from "@testing-library/react";
-import MovieDetails from "./MovieDetails";
+import MovieDetails from "../components/MovieDetails";
 
 type MockedResponse<T> = Promise<{
   ok: boolean;

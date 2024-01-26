@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useMovieContext } from '../contexts/movieContext';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import MovieModal from './AddMovieModal';
+import MovieModal from '../components/AddMovieModal';
 
 global.fetch = jest.fn();
 
@@ -47,6 +47,8 @@ describe('Movie creation and displaying', () => {
       expect(movieScoreInput).toBeInTheDocument();
       expect(movieGenreInput).toBeInTheDocument();
       expect(moviePosterInput).toBeInTheDocument();
+
+      jest.spyOn(console, 'error').mockImplementation(() => {})
 
       fireEvent.change(movieTitleInput, { target: { value: 'Test Movie' } });
       fireEvent.change(movieScoreInput[0], { target: { value: '5' } });
