@@ -68,7 +68,6 @@ export const getMovieById = async (movieId: string) => {
     console.error('Error fetching movies:', error);
     return null;
   }
-
 }
 
 export const deleteMovie = async (movieId: string) => {
@@ -76,7 +75,7 @@ export const deleteMovie = async (movieId: string) => {
     if (!movieId) {
       throw new Error("Movie ID is required");
     }
-
+    
     const response = await fetch(`${url}movies/${movieId}`, {
       method: "DELETE",
       headers: {
@@ -91,12 +90,33 @@ export const deleteMovie = async (movieId: string) => {
     }
 
     const deletedMovie = await response.json();
-
-    console.log(deletedMovie)
-
     return deletedMovie;
   } catch (error) {
     console.error("Error deleting movie:", error);
+    return null;
+  }
+};
+
+export const updateMovie = async (movieId: string, data: any) => {
+  try {
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}movies/${movieId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      console.error(`Failed to update movie: ${response.statusText}`);
+      return null;
+    }
+
+    const updatedMovie = await response.json();
+    return updatedMovie;
+  } catch (error) {
+    console.error("Error updating movie:", error);
     return null;
   }
 };
