@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Cinemate Next.js Project
+This is a Next.js project created with TypeScript, Prisma, MongoDB, and deployed on Vercel. Jest is used for unit testing, and Jenkins is implemented for CI/CD. Authentication is handled through Auth0.
 
-## Getting Started
+Project Overview
+Cinemate is a web application developed using Next.js, a React framework. It leverages TypeScript for type-checking, Prisma for database management (MongoDB), and Auth0 for user authentication. The project includes unit tests written with Jest to ensure the reliability of individual components.
 
-First, run the development server:
+Getting Started
+To run the project locally, follow these steps:
 
-```bash
+Install dependencies:
+
+bash
+Copy code
+npm install
+Run the development server:
+
+bash
+Copy code
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Open http://localhost:3000 in your browser.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Building the Project
+To build the project for deployment, use the following command:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+bash
+Copy code
+npm run build
+This will generate a production-ready build in the .next directory.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Running Tests
+Jest is used for unit testing. Run the tests with the following command:
 
-## Learn More
+bash
+Copy code
+npm test
+Continuous Integration/Continuous Deployment (CI/CD)
+This project is set up with Jenkins for CI/CD. Jenkins is configured to automate the build and deployment processes. It ensures that changes are tested and deployed consistently.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Technologies Used
+Next.js: A React framework for building web applications.
+TypeScript: A superset of JavaScript that adds static types.
+Prisma: A database toolkit for TypeScript and Node.js.
+MongoDB: A NoSQL database for storing application data.
+Auth0: A platform for authentication and authorization.
+Jest: A testing framework for JavaScript and TypeScript.
+Jenkins: An automation server for building, testing, and deploying.
