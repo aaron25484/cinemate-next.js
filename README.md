@@ -1,29 +1,34 @@
-Cinemate Next.js Project
+# Cinemate Next.js Project
+
 This is a Next.js project created with TypeScript, Prisma, MongoDB, and deployed on Vercel. Jest is used for unit testing, and Jenkins is implemented for CI/CD. Authentication is handled through Auth0.
 
-Project Overview
+## Project Overview
+
 Cinemate is a web application developed using Next.js, a React framework. It leverages TypeScript for type-checking, Prisma for database management (MongoDB), and Auth0 for user authentication. The project includes unit tests written with Jest to ensure the reliability of individual components.
 
-Getting Started
+## Getting Started
+
 To run the project locally, follow these steps:
 
-Install dependencies:
+1. Install dependencies:
 
-bash
-Copy code
-npm install
-Run the development server:
+    ```bash
+    npm install
+    ```
 
-bash
-Copy code
-npm run dev
-Open http://localhost:3000 in your browser.
+2. Run the development server:
 
-Building the Project
+    ```bash
+    npm run dev
+    ```
+
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Building the Project
+
 To build the project for deployment, use the following command:
 
-bash
-Copy code
+```bash
 npm run build
 This will generate a production-ready build in the .next directory.
 
